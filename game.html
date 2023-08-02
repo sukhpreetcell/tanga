@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ferengi Tanga Game</title>
+</head>
+<body>
+    <h1>Ferengi Tanga Game</h1>
+    <p id="latinum">You have 100 bars of gold-pressed latinum</p>
+    <input type="number" id="bet" min="1" value="1">
+    <button id="play-button">Play</button>
+    <p id="game-result"></p>
+
+    <script>
+        document.getElementById('play-button').addEventListener('click', function() {
+            const bet = document.getElementById('bet').value;
+            fetch('http://localhost:3000/play', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bet: parseInt(bet) }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('game-result').textContent = data.message;
+                document.getElementById('latinum').textContent = 'You have ' + data.playerLatinum + ' bars of gold-pressed latinum';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
